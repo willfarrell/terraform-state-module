@@ -39,3 +39,16 @@ output "backend_s3_dynamodb_table" {
 }
 
 ```
+
+Ensure `.gitignore` saves these files.
+```
+# Compiled files
+*.tfstate
+*.tfstate.backup
+!global/init/terraform.tfstate
+!global/init/terraform.tfstate.backup
+
+# Module directory
+.terraform/
+```
+
