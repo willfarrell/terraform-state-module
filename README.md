@@ -2,7 +2,7 @@
 Terraform module: Set up state backend using S3 &amp; DynamoDB
 
 ## Use
-`global/state/main.tf`:
+`global/init/main.tf`:
 ```hcl-terraform
 variable "name" {
   default = "project-name"
