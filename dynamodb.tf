@@ -9,6 +9,10 @@ resource "aws_dynamodb_table" "main" {
     name = "LockID"
     type = "S"
   }
+  
+  server_side_encryption {
+    enable = true
+  }
 
   tags {
     Name = "Terraform State"
