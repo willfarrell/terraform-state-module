@@ -21,7 +21,7 @@ provider "aws" {
 
 module "state" {
   source = "github.com/willfarrell/terraform-state-module"
-  version = "0.0.1"
+  version = "v0.1.0"
 }
 
 output "backend_s3_bucket" {
