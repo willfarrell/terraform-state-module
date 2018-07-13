@@ -3,6 +3,10 @@ resource "aws_s3_bucket" "main-logs" {
   acl                 = "log-delivery-write"
   acceleration_status = "Enabled"
 
+  versioning {
+    enabled = false
+  }
+
   lifecycle_rule {
     id      = "log"
     enabled = true
@@ -28,6 +32,14 @@ resource "aws_s3_bucket" "main-logs" {
     }
   }
 
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "${local.sse_algorithm}"
+      }
+    }
+  }
+
   tags {
     Name = "Terraform State Logging"
     Terraform = true
@@ -50,6 +62,14 @@ resource "aws_s3_bucket" "main" {
 
   lifecycle {
     prevent_destroy = true
+  }
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "${local.sse_algorithm}"
+      }
+    }
   }
 
   tags {
