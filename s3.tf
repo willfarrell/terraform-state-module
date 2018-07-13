@@ -1,5 +1,5 @@
-resource "aws_s3_bucket" "main_logs" {
-  bucket              = "terraform-state-${var.name}-logs"
+resource "aws_s3_bucket" "main-logs" {
+  bucket              = "terraform-state${local.name}-logs"
   acl                 = "log-delivery-write"
   acceleration_status = "Enabled"
 
@@ -24,17 +24,18 @@ resource "aws_s3_bucket" "main_logs" {
     }
 
     expiration {
-      days = 90
+      days = 365
     }
   }
 
   tags {
     Name = "Terraform State Logging"
+    Terraform = true
   }
 }
 
 resource "aws_s3_bucket" "main" {
-  bucket              = "terraform-state-${var.name}"
+  bucket              = "terraform-state${local.name}"
   acl                 = "private"
   acceleration_status = "Enabled"
 
@@ -43,7 +44,7 @@ resource "aws_s3_bucket" "main" {
   }
 
   logging {
-    target_bucket = "${aws_s3_bucket.main_logs.id}"
+    target_bucket = "${aws_s3_bucket.main-logs.id}"
     target_prefix = "log/"
   }
 
@@ -53,5 +54,6 @@ resource "aws_s3_bucket" "main" {
 
   tags {
     Name = "Terraform State"
+    Terraform = true
   }
 }

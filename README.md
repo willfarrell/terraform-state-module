@@ -22,10 +22,6 @@ provider "aws" {
 module "state" {
   source = "github.com/willfarrell/terraform-state-module"
   version = "0.0.1"
-
-  name = "${var.name}"
-  aws_region = "${var.aws_region}"
-  aws_profile = "${var.aws_profile}"
 }
 
 output "backend_s3_bucket" {
@@ -39,6 +35,9 @@ output "backend_s3_dynamodb_table" {
 }
 
 ```
+
+## Inputs
+- **name:** Makes name unique terraform-state-${name} [Optional]
 
 Ensure `.gitignore` saves these files.
 ```
