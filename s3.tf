@@ -1,49 +1,6 @@
-resource "aws_s3_bucket" "main-logs" {
-  bucket              = "terraform-state${local.name}-logs"
-  acl                 = "log-delivery-write"
-  acceleration_status = "Enabled"
-
-  versioning {
-    enabled = false
-  }
-
-  lifecycle_rule {
-    id      = "log"
-    enabled = true
-
-    prefix  = "log/"
-    tags {
-      "rule"      = "log"
-      "autoclean" = "true"
-    }
-
-    transition {
-      days          = 30
-      storage_class = "STANDARD_IA"
-    }
-
-    transition {
-      days          = 60
-      storage_class = "GLACIER"
-    }
-
-    expiration {
-      days = 365
-    }
-  }
-
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "${local.sse_algorithm}"
-      }
-    }
-  }
-
-  tags {
-    Name = "Terraform State Logging"
-    Terraform = true
-  }
+module "logs" {
+  source = "git@github.com:willfarrell/terraform-s3-logs-module"
+  name = "terraform-state${local.name}"
 }
 
 resource "aws_s3_bucket" "main" {
@@ -56,7 +13,7 @@ resource "aws_s3_bucket" "main" {
   }
 
   logging {
-    target_bucket = "${aws_s3_bucket.main-logs.id}"
+    target_bucket = "${module.logs.id}"
     target_prefix = "log/"
   }
 
