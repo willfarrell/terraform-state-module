@@ -1,6 +1,7 @@
 variable "name" {
   type = "string"
   description = "name to be used. `terraform-state-{name}`"
+  default = ""
 }
 variable "aws_region" {
   type = "string"
