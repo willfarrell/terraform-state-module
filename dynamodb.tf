@@ -1,8 +1,8 @@
 
 resource "aws_dynamodb_table" "main" {
   name = "terraform-state${local.name}"
-  read_capacity  = 5
-  write_capacity = 5
+  read_capacity  = 1
+  write_capacity = 1
   hash_key       = "LockID"
 
   attribute {
@@ -15,6 +15,6 @@ resource "aws_dynamodb_table" "main" {
   }
 
   tags {
-    Name = "Terraform State"
+    Name = "Terraform Remote State"
   }
 }

@@ -1,9 +1,9 @@
-output "backend_s3_bucket" {
+output "s3_bucket_id" {
   value = "${aws_s3_bucket.main.id}"
 }
-output "backend_s3_bucket_logs" {
+output "s3_bucket_logs_id" {
   value = "${module.logs.id}"
 }
-output "backend_s3_dynamodb_table" {
+output "dynamodb_table_id" {
   value = "${aws_dynamodb_table.main.id}"
 }

@@ -30,7 +30,7 @@ resource "aws_s3_bucket" "main" {
   }
 
   tags {
-    Name = "Terraform State"
+    Name = "Terraform Remote State"
     Terraform = true
   }
 }
