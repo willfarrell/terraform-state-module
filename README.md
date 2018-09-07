@@ -15,6 +15,7 @@ provider "aws" {
 
 module "state" {
   source = "git@github.com/willfarrell/terraform-state-module"
+  name = "NAME"
 }
 
 output "backend_s3_bucket" {
@@ -33,18 +34,18 @@ output "backend_s3_dynamodb_table" {
 ```hcl-terraform
 terraform {
   backend "s3" {
-    bucket         = "terraform-state-NAME"
+    bucket         = "tfstate-NAME"
     key            = "vpc/terraform.tfstate"
     region         = "us-east-1"
     profile        = "tesera"
-    dynamodb_table = "terraform-state-NAME"
+    dynamodb_table = "tfstate-NAME"
     kms_key_id     = "arn:aws:kms:us-east-1:<account_id>:key/<key_id>"
   }
 }
 ```
 
 ## Inputs
-- **name:** Makes name unique terraform-state-${name} [Optional]
+- **name:** Makes name unique tfstate-${name} [Optional]
 
 Ensure `.gitignore` saves these files.
 ```
