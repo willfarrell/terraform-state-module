@@ -18,15 +18,29 @@ module "state" {
 }
 
 output "backend_s3_bucket" {
-  value = "${module.state.backend_s3_bucket}"
+  value = "${module.state.s3_bucket_id}"
 }
 output "backend_s3_bucket_logs" {
-  value = "${module.state.backend_s3_bucket_logs}"
+  value = "${module.state.s3_bucket_logs_id}"
 }
 output "backend_s3_dynamodb_table" {
-  value = "${module.state.backend_s3_dynamodb_table}"
+  value = "${module.state.dynamodb_table_id}"
 }
 
+```
+
+### Remote State
+```hcl-terraform
+terraform {
+  backend "s3" {
+    bucket         = "terraform-state-NAME"
+    key            = "vpc/terraform.tfstate"
+    region         = "us-east-1"
+    profile        = "tesera"
+    dynamodb_table = "terraform-state-NAME"
+    kms_key_id     = "arn:aws:kms:us-east-1:<account_id>:key/<key_id>"
+  }
+}
 ```
 
 ## Inputs

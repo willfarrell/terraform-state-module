@@ -1,6 +1,6 @@
 
 resource "aws_dynamodb_table" "main" {
-  name = "terraform-state${local.name}"
+  name = "tfstate${local.name}"
   read_capacity  = 1
   write_capacity = 1
   hash_key       = "LockID"
@@ -16,5 +16,7 @@ resource "aws_dynamodb_table" "main" {
 
   tags {
     Name = "Terraform Remote State"
+    Terraform = true
+    Security = "SSE:AWS"
   }
 }

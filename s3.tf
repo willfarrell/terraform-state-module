@@ -1,10 +1,11 @@
+# TODO update to use published source
 module "logs" {
   source = "git@github.com:willfarrell/terraform-s3-logs-module"
-  name = "terraform-state${local.name}"
+  name = "tfstate${local.name}"
 }
 
 resource "aws_s3_bucket" "main" {
-  bucket              = "terraform-state${local.name}"
+  bucket              = "tfstate${local.name}"
   acl                 = "private"
   acceleration_status = "Enabled"
 
@@ -32,5 +33,44 @@ resource "aws_s3_bucket" "main" {
   tags {
     Name = "Terraform Remote State"
     Terraform = true
+    //Security = "SSE:KMS"
+    Security = "SSE:AWS"
   }
+}
+
+
+resource "aws_s3_bucket_policy" "main" {
+  bucket = "${aws_s3_bucket.main.id}"
+  policy =<<POLICY
+{
+  "Version": "2012-10-17",
+  "Id": "Terraform Remote State Policy",
+  "Statement": [
+     {
+        "Sid":"DenyIncorrectEncryptionHeader",
+        "Effect":"Deny",
+        "Principal":"*",
+        "Action":"s3:PutObject",
+        "Resource":"arn:aws:s3:::${aws_s3_bucket.main.id}/*",
+        "Condition":{
+           "StringNotEquals":{
+             "s3:x-amz-server-side-encryption": "${local.sse_algorithm}"
+           }
+        }
+     },
+     {
+        "Sid":"DenyUnEncryptedObjectUploads",
+        "Effect":"Deny",
+        "Principal":"*",
+        "Action":"s3:PutObject",
+        "Resource":"arn:aws:s3:::${aws_s3_bucket.main.id}/*",
+        "Condition":{
+           "Null":{
+              "s3:x-amz-server-side-encryption":"true"
+           }
+        }
+     }
+  ]
+}
+POLICY
 }
