@@ -38,39 +38,40 @@ resource "aws_s3_bucket" "main" {
   }
 }
 
-
-resource "aws_s3_bucket_policy" "main" {
-  bucket = "${aws_s3_bucket.main.id}"
-  policy =<<POLICY
-{
-  "Version": "2012-10-17",
-  "Id": "Terraform Remote State Policy",
-  "Statement": [
-     {
-        "Sid":"DenyIncorrectEncryptionHeader",
-        "Effect":"Deny",
-        "Principal":"*",
-        "Action":"s3:PutObject",
-        "Resource":"arn:aws:s3:::${aws_s3_bucket.main.id}/*",
-        "Condition":{
-           "StringNotEquals":{
-             "s3:x-amz-server-side-encryption": "${local.sse_algorithm}"
-           }
-        }
-     },
-     {
-        "Sid":"DenyUnEncryptedObjectUploads",
-        "Effect":"Deny",
-        "Principal":"*",
-        "Action":"s3:PutObject",
-        "Resource":"arn:aws:s3:::${aws_s3_bucket.main.id}/*",
-        "Condition":{
-           "Null":{
-              "s3:x-amz-server-side-encryption":"true"
-           }
-        }
-     }
-  ]
-}
-POLICY
-}
+// Causes: Failed to save state: failed to upload state: AccessDenied: Access Denied
+//	status code: 403, request id: ***********, host id: *********
+//resource "aws_s3_bucket_policy" "main" {
+//  bucket = "${aws_s3_bucket.main.id}"
+//  policy =<<POLICY
+//{
+//  "Version": "2012-10-17",
+//  "Id": "Terraform Remote State Policy",
+//  "Statement": [
+//     {
+//        "Sid":"DenyIncorrectEncryptionHeader",
+//        "Effect":"Deny",
+//        "Principal":"*",
+//        "Action":"s3:PutObject",
+//        "Resource":"arn:aws:s3:::${aws_s3_bucket.main.id}/*",
+//        "Condition":{
+//           "StringNotEquals":{
+//             "s3:x-amz-server-side-encryption": "${local.sse_algorithm}"
+//           }
+//        }
+//     },
+//     {
+//        "Sid":"DenyUnEncryptedObjectUploads",
+//        "Effect":"Deny",
+//        "Principal":"*",
+//        "Action":"s3:PutObject",
+//        "Resource":"arn:aws:s3:::${aws_s3_bucket.main.id}/*",
+//        "Condition":{
+//           "Null":{
+//              "s3:x-amz-server-side-encryption":"true"
+//           }
+//        }
+//     }
+//  ]
+//}
+//POLICY
+//}
