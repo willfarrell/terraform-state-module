@@ -4,28 +4,41 @@ Terraform module: Set up state backend using S3 &amp; DynamoDB
 ## Use
 `global/init/main.tf`:
 ```hcl-terraform
-variable "aws_profile" {
-  default = "default"
+variable "name" {
+  default = "NAME"
+}
+variable "region" {
+  default = "us-east-1"
+}
+variable "profile" {
+  default = "farrelllabs"
 }
 
 provider "aws" {
-  region  = "us-east-1"
-  profile = "${var.aws_profile}"
+  region  = "${var.region}"
+  profile = "${var.profile}"
 }
 
 module "state" {
   source = "git@github.com/willfarrell/terraform-state-module"
-  name = "NAME"
+  name = "${var.name}"
 }
 
+# Used in backend.s3 block
+output "backend_s3_region" {
+  value = "${var.region}"
+}
+output "backend_s3_profile" {
+  value = "${var.profile}"
+}
+output "backend_s3_dynamodb_table" {
+  value = "${module.state.dynamodb_table_id}"
+}
 output "backend_s3_bucket" {
   value = "${module.state.s3_bucket_id}"
 }
 output "backend_s3_bucket_logs" {
   value = "${module.state.s3_bucket_logs_id}"
-}
-output "backend_s3_dynamodb_table" {
-  value = "${module.state.dynamodb_table_id}"
 }
 
 ```
