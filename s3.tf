@@ -1,13 +1,12 @@
 # TODO update to use published source
 module "logs" {
   source = "git@github.com:willfarrell/terraform-s3-logs-module"
-  name = "tfstate${local.name}"
+  name = "terraform-state${local.name}"
 }
 
 resource "aws_s3_bucket" "main" {
-  bucket              = "tfstate${local.name}"
+  bucket              = "terraform-state${local.name}"
   acl                 = "private"
-  acceleration_status = "Enabled"
 
   versioning {
     enabled = true
