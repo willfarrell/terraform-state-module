@@ -1,9 +1,3 @@
-# TODO update to use published source
-module "logs" {
-  source = "git@github.com:willfarrell/terraform-s3-logs-module"
-  name = "terraform-state${local.name}"
-}
-
 resource "aws_s3_bucket" "main" {
   bucket              = "terraform-state${local.name}"
   acl                 = "private"
@@ -12,10 +6,10 @@ resource "aws_s3_bucket" "main" {
     enabled = true
   }
 
-  logging {
-    target_bucket = "${module.logs.id}"
-    target_prefix = "log/"
-  }
+  #logging {
+  #  target_bucket = "${module.logs.id}"
+  #  target_prefix = "log/"
+  #}
 
   lifecycle {
     prevent_destroy = true
