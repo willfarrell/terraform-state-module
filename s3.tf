@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "main" {
-  bucket              = "terraform-state${local.name}"
-  acl                 = "private"
+  bucket = "terraform-state${local.name}"
+  acl    = "private"
 
   versioning {
     enabled = true
@@ -18,13 +18,13 @@ resource "aws_s3_bucket" "main" {
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        sse_algorithm = "${local.sse_algorithm}"
+        sse_algorithm = local.sse_algorithm
       }
     }
   }
 
-  tags {
-    Name = "Terraform Remote State"
+  tags = {
+    Name      = "Terraform Remote State"
     Terraform = true
     //Security = "SSE:KMS"
     Security = "SSE:AWS"
@@ -32,14 +32,14 @@ resource "aws_s3_bucket" "main" {
 }
 
 resource "aws_s3_bucket_public_access_block" "main" {
-  bucket = "${aws_s3_bucket.main.id}"
+  bucket = aws_s3_bucket.main.id
 
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
-  
+
 // Causes: Failed to save state: failed to upload state: AccessDenied: Access Denied
 //	status code: 403, request id: ***********, host id: *********
 //resource "aws_s3_bucket_policy" "main" {
